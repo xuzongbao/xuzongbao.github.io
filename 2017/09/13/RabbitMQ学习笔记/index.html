@@ -6,19 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://ifine.xin">
-  <title>Archives: 2017/8 | Elven的博客</title>
+  <title>RabbitMQ学习笔记 | Elven的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="java小菜鸟，江苏大学17级硕士。">
-<meta name="keywords" content="开发者,程序猿,极客,编程,代码,江苏高考志愿,江苏高考志愿填报">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Elven的博客">
-<meta property="og:url" content="http://ifine.xin/archives/2017/08/index.html">
+  <meta name="description" content="RabbitMQ学习笔记">
+<meta name="keywords" content="RabbitMQ，消息队列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ学习笔记">
+<meta property="og:url" content="http://ifine.xin/2017/09/13/RabbitMQ学习笔记/index.html">
 <meta property="og:site_name" content="Elven的博客">
-<meta property="og:description" content="java小菜鸟，江苏大学17级硕士。">
+<meta property="og:description" content="RabbitMQ学习笔记">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-15T03:50:26.290Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Elven的博客">
-<meta name="twitter:description" content="java小菜鸟，江苏大学17级硕士。">
+<meta name="twitter:title" content="RabbitMQ学习笔记">
+<meta name="twitter:description" content="RabbitMQ学习笔记">
   
     <link rel="alternative" href="/atom.xml" title="Elven的博客" type="application/atom+xml">
   
@@ -156,76 +157,193 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-RabbitMQ学习笔记" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/26/test/" class="archive-article-date">
-  	<time datetime="2017-08-26T07:19:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/26/test/">test</a>
+    <h1 class="article-title" itemprop="name">
+      RabbitMQ学习笔记
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/26/hello-world/" class="archive-article-date">
-  	<time datetime="2017-08-26T06:50:07.020Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
+        
+        <a href="/2017/09/13/RabbitMQ学习笔记/" class="archive-article-date">
+  	<time datetime="2017-09-12T16:05:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-13</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/26/hello-world/">Hello World</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="RabbitMQ基本概念"><a href="#RabbitMQ基本概念" class="headerlink" title="RabbitMQ基本概念"></a>RabbitMQ基本概念</h2><ol>
+<li><p>producer &amp; consumer</p>
+<p>  生产者 &amp; 消费者</p>
+</li>
+<li><p>Queue</p>
+<p> 消息队列，提供了FIFO处理机制，具有缓存的能力。对于队列中的消息可以设置为持久化、临时以及自动删除。三者的区别在于：<br> 持久化的队列中，消息会在服务器本地硬盘存储一份，防止系统崩溃，数据丢失；临时队列中，消息在系统重启之后就会丢失；<br> 自动删除队列中，当没有用户连接到服务器时，消息会被自动删除。</p>
+</li>
+<li><p>Exchange</p>
+<p> 交换机，提供消息路由策略。RabbitMQ中消息的传播途径是：producer生产一条消息，然后发送给Exchange，并且带有有意Routing_Key,<br> Exchange会根据传递过来的Routing_Key按照特定的路由算法，将消息传递给与其绑定的一个或者多个Queue。Exchange也可以设置为持久化、临时以及自动删除。</p>
+<ol>
+<li><p>Exchange有4种类型：</p>
+<p> direct：直接交换机，工作方式类似于单播，Exchange会将消息发送给完全匹配Routing_Key的Queue；<br> fanout: 广播式交换机，不管消息的Routing_Key是什么，Exchange都会将消息转发给所有绑定的Queue；<br> topic： 主题交换机，工作方式类似于组播，Exchange会将消息转发给与Routing_Key匹配的所有队列，比如Routing_Key为user.test的<br> Message会转发给绑定匹配模式为<em>.test，user.test，\</em>.*，#.tser.test.#的队列。其中*表示匹配一个任意词组，#表示匹配0个或多个词组<br> headers：根据消息体的header匹配，一般不常用。</p>
+</li>
+</ol>
+</li>
+<li><p>Binding</p>
+<p> 所谓绑定便是将一个特定的Exchange和一个特定的Queue绑定起来，Exchange和Queue的绑定可以是多对多的关系。</p>
+</li>
+<li><p>vhost（virtual host）</p>
+<p> 顾名思义了，vhost便是虚拟主机，在RabbitMQ server上可以创建多个虚拟的Message breker，又叫做virtual hosts（vhosts）。每一个vhost本质上<br> 就是一个mini-RabbitMQ server，分别管理各自的Exchange和bindings。vhost相当于物理的服务器，可以为不同的app提供边界隔离，使得应用安全的<br> 运行在不同的vhost实例上，相互之间不会干扰。producer和consumer连接RabbitMQ server需要指定一个vhost。</p>
+</li>
+</ol>
+<h2 id="RabbitMQ的使用过程"><a href="#RabbitMQ的使用过程" class="headerlink" title="RabbitMQ的使用过程"></a>RabbitMQ的使用过程</h2><ol>
+<li>客户端连接到消息队列服务器，打开一个channel；</li>
+<li>客户端声明一个Exchange，并设置相关属性；</li>
+<li>客户端声明一个Queue，并设置相关属性；</li>
+<li>客户端使用Routing_Key，在Exchange和Queue之间建立好绑定关系；</li>
+<li>客户端投递消息到Exchange；</li>
+<li>Exchange接收到消息后，就根据消息的Routing_Key和已经设置的binding，进行消息路由，将消息投递到一个或多个队列里。</li>
+</ol>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">RabbitMQ，消息队列</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/消息队列/" class="article-tag-list-link color5">消息队列</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://ifine.xin/2017/09/13/RabbitMQ学习笔记/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/08/26/test/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">test</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+  <div id="SOHUCS" sid="RabbitMQ学习笔记" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = "cytbpT40R"; 
+var conf = "42b5cb68973d4f96519d87d20e7ae97d"; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("//changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+  
+
+  
 
 
           </div>
@@ -248,8 +366,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
